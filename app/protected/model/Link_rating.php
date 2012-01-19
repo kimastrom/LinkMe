@@ -33,6 +33,9 @@ class Link_rating extends Link_ratingBase
         parent::setupModel(__CLASS__);
     }
 
+    /**
+     * Calculate the rating of a link
+     */
     public function getRating()
     {
         $opt['where'] = 'link_id = ?';
@@ -45,6 +48,9 @@ class Link_rating extends Link_ratingBase
         return $rating;
     }
 
+    /**
+     * Check if user has voted on a specific link
+     */
     public function hasVoted($linkID)
     {
         if ($this->user_id == $userID) {
@@ -53,6 +59,9 @@ class Link_rating extends Link_ratingBase
         return false;
     }
 
+    /**
+     * update database with vote
+     */
     public function doVote($vote,$link)
     {
         $session = Doo::session("LinkMe");

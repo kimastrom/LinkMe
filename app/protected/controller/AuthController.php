@@ -12,13 +12,21 @@ class AuthController extends CoreController
         $this->data[self::MENU_LINK_URL] = $this->buildLinkURL();
     }
 
+    /**
+     * logout user
+     * @return string baseurl
+     */
     public function logout()
     {
         unset($_SESSION['user']);
         session_destroy();
-        return Doo::conf()->APP_URL;
+        return $this->data[self::BASE_URL];
     }
 
+    /**
+     * Login user
+     * @return void
+     */
     public function login()
     {
         $this->data[self::PAGE_TITLE] = 'Logga in';
@@ -52,7 +60,11 @@ class AuthController extends CoreController
 
         $this->renderc('login', $this->data);
     }
-
+    
+    /**
+     * Handle the registration of user
+     * @return void
+     */
     public function register()
     {
         $this->data[self::PAGE_TITLE] = 'Registrera dig!';

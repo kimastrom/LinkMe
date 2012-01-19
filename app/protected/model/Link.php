@@ -43,6 +43,9 @@ class Link extends LinkBase
      */
     public $rating;
     
+    /**
+     * @var string.
+     */
     public $author;
 
     public $_table = 'link';
@@ -62,6 +65,10 @@ class Link extends LinkBase
         }
     }
 
+    /**
+     * calculate the total rating of this link
+     * @return int the rating of link
+     */
     public function getRating()
     {
         $rating = 0;
@@ -76,6 +83,10 @@ class Link extends LinkBase
         return $rating;
     }
 
+    /**
+     * calculate number of comments of this link
+     * @return int number of comments
+     */
     public function getNrOfComments()
     {
         if ($this->id != null) {
@@ -87,7 +98,10 @@ class Link extends LinkBase
         return 0;
 
     }
-
+    
+    /**
+     * check if current inlogged user is owner of this link
+     */
     public function isOwner()
     {
         $session = Doo::session("LinkMe");
@@ -97,6 +111,10 @@ class Link extends LinkBase
         return false;
     }
 
+    /**
+     * Get the author name of this Link
+     * @return String username
+     */
     public function getAuthor()
     {
         Doo::loadModel('User');
@@ -111,6 +129,9 @@ class Link extends LinkBase
         return date("G:i d F, Y", strtotime($this->date));
     }
 
+    /**
+     * handle the sorting by most comments
+     */
     function sorByComments($a, $b)
     {
         if ($a->nrOfComments == $b->nrOfComments) {
@@ -119,6 +140,9 @@ class Link extends LinkBase
         return ($a->nrOfComments < $b->nrOfComments) ? -1 : 1;
     }
 
+    /**
+     * handle the sorting by rating
+     */
     function sortByRating($a, $b)
     {
         if ($a->rating == $b->rating) {
@@ -129,40 +153,28 @@ class Link extends LinkBase
 
     /**
      * Sorts links by most comments
-     * @return Array with links
+     * @return Array with link objects
      */
     public function mostComments()
     {
         $links = $this->find();
-        //echo "innan sortering <br>";
-        //foreach ($links as $key => $value) {
-        //    echo "id[$value->id] komments[$value->nrOfComments] <br> ";
-        // }
 
         usort($links, array("Link", "sorByComments"));
         $links = array_reverse($links);
-        //echo "<br>efter sortering <br>";
-        //foreach ($links as $key => $value) {
-        //    echo "id[$value->id] komments[$value->nrOfComments] <br> ";
-        //}
 
         return $links;
     }
 
+    /**
+     * Sorts links by highest rate
+     * @return array with link objects
+     */
     public function highestRate()
     {
         $links = $this->find();
-        //echo "innan sortering <br>";
-        //foreach ($links as $key => $value) {
-        //    echo "id[$value->id] komments[$value->rating] <br> ";
-        //}
 
         usort($links, array("Link", "sortByRating"));
         $links = array_reverse($links);
-        //echo "<br>efter sortering <br>";
-        //foreach ($links as $key => $value) {
-        //    echo "id[$value->id] komments[$value->rating] <br> ";
-        //}
 
         return $links;
     }

@@ -28,7 +28,14 @@ class Comment extends CommentBase
      */
     public $link_id;
     
+    /**
+     * @var string author name.
+     */
     public $author;
+    
+    /**
+     * @var boolean
+     */
     public $isOwner;
 
     public $_table = 'comment';
@@ -46,6 +53,9 @@ class Comment extends CommentBase
         }
     }
 
+    /**
+     * Check if logged in user is owner of this comment
+     */
     public function isOwner()
     {
         $session = Doo::session("LinkMe");
@@ -55,6 +65,9 @@ class Comment extends CommentBase
         return false;
     }
 
+    /**
+     * get author name from User model
+     */
     public function getAuthor()
     {
         Doo::loadModel('User');
@@ -64,6 +77,9 @@ class Comment extends CommentBase
         return $user->username;
     }
 
+    /**
+     * Format tha date from database
+     */
     public function formatDate()
     {
         return date("G:i d F, Y", strtotime($this->date));

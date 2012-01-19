@@ -13,6 +13,10 @@ class LinkController extends CoreController
         $this->data[self::MENU_LINK_URL] = $this->buildLinkURL();
     }
 
+    /**
+     * handles the link rating
+     * @return void
+     */
     public function vote()
     {
         if ($this->isLoggedIn()) {
@@ -28,10 +32,14 @@ class LinkController extends CoreController
         }
     }
 
+    /**
+     * Get all data for single view
+     */
     public function singleView()
     {
         $a = $this->vote();
         $id = $this->params['id'];
+        
         if ($this->doesLinkExist($id)) {
             //Get link by id
             Doo::loadModel('Link');
@@ -44,6 +52,8 @@ class LinkController extends CoreController
 
             if ($this->isLoggedIn()) {
                 if ($this->isPost()) {
+                    
+                    //Validate form data
                     $v = new DooValidator();
                     $error = $v->validate($_POST, 'add-comment-rules');
                     $this->data[self::ERRORS] = $error;
@@ -69,14 +79,14 @@ class LinkController extends CoreController
                     }
                 }
 
-                //Ta bort kommentar
+                //Delete comment
                 if (isset($_GET[self::GET_DELETE])) {
                     Doo::loadModel('Comment');
                     $comment = new Comment();
                     $comment->id = $_GET[self::GET_DELETE];
                     $comment->delete();
                     
-                //Editera en kommentar    
+                //Edit comment   
                 } else if (isset($_GET[self::GET_EDIT])) {
                     Doo::loadModel('Comment');
                     $comment = new Comment();
@@ -87,7 +97,7 @@ class LinkController extends CoreController
                     $this->data['isEdit'] = true;
                 }
             }
-            //Get comments for the link
+            //Get related comments
             Doo::loadModel('Comment');
             $comments = new Comment();
             $comments->link_id = $id;
@@ -99,6 +109,10 @@ class LinkController extends CoreController
 
     }
 
+    /**
+     * Check if a link exists
+     * @return boolean
+     */
     public function doesLinkExist($id)
     {
         Doo::loadModel('Link');
@@ -113,7 +127,7 @@ class LinkController extends CoreController
 
     public function showLinks()
     {
-
+        $this->data[self::PAGE_TITLE] = 'LinkMe';
         Doo::loadModel('Link');
         Doo::loadModel('Category');
 
@@ -136,7 +150,7 @@ class LinkController extends CoreController
             }
         }
 
-        //hämta länkar efter kategori
+        //Get links by category
         $l = new Link();
         $opt = array();
         if (isset($this->params['category'])) {
@@ -145,7 +159,7 @@ class LinkController extends CoreController
             $category->category = $this->params['category'];
             $category = $category->getOne();
 
-            //Ifall categori inte existerar
+            //If category not exist
             if (!isset($category->id)) {
                 return 404;
             } else {
@@ -153,7 +167,7 @@ class LinkController extends CoreController
             }
         }
 
-        //Hämtar länkar efter sortering
+        //Get links by sort option
         if (isset($this->params['sort'])) {
             switch ($this->params['sort']) {
                 case 'new' :
@@ -173,17 +187,18 @@ class LinkController extends CoreController
         }
 
         $this->data['links'] = $links;
-        $this->data[self::PAGE_TITLE] = 'Start';
-
         $this->render('start', $this->data);
     }
 
+    /**
+     * add link
+     */
     public function addlink()
     {
         if ($this->isLoggedIn()) {
             if ($this->isPost()) {
                 
-                //validera formulärdatan
+                //Validate form data
                 $v = new DooValidator();
                 $error = $v->validate($_POST, 'add-link-rules');
                 $this->data[self::ERRORS] = $error;

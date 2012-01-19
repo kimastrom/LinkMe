@@ -15,11 +15,11 @@ class CoreController extends DooController
     public $session;
 
     /**
-     * Data object of the application
+     * @var Data array
      */
     public $data;
 
-    //Konstanter för kontrollenrna
+    //Common constants
     const USERID = 'user_id';
     const PAGE_TITLE = 'title';
     const BASE_URL = 'baseurl';
@@ -29,12 +29,11 @@ class CoreController extends DooController
 
     public function __construct()
     {
-
         $this->prepareCategories();
         $this->data[self::PAGE_TITLE] = 'BerntLinking';
         $this->data[self::BASE_URL] = Doo::conf()->APP_URL;
-        if (empty($this->data['isLoggedIn'])) {
-            $this->data['isLoggedIn'] = false;
+        if (empty($this->data[self::IS_LOGGED_IN])) {
+            $this->data[self::IS_LOGGED_IN] = false;
         }
 
         $this->auth = new DooAuth('LinkMe');
@@ -42,14 +41,18 @@ class CoreController extends DooController
         $this->auth->start();
         $this->session = Doo::session('LinkMe');
         if ($this->isLoggedIn()) {
-            $this->data['isLoggedIn'] = true;
+            $this->data[self::IS_LOGGED_IN] = true;
             //$this->data['username'] = $this->auth->__get('_username');
             $this->data['user-id'] = $this->session->id;
         } else {
-            $this->data['isLoggedIn'] = false;
+            $this->data[self::IS_LOGGED_IN] = false;
         }
     }
 
+    /**
+     * check if iser is logged in
+     * @return boolean
+     */
     public function isLoggedIn()
     {
         if ($this->auth->isValid()) {
@@ -59,7 +62,8 @@ class CoreController extends DooController
     }
 
     /**
-     * Creates URL for links in menu
+     * Creates baseURL for links in menu
+     * @return string
      */
     public function buildLinkURL()
     {
@@ -71,6 +75,10 @@ class CoreController extends DooController
         return $url;
     }
 
+    /**
+     * gets all available categories 
+     * @return void
+     */
     public function prepareCategories()
     {
         Doo::loadModel('Category');
@@ -78,6 +86,10 @@ class CoreController extends DooController
         $this->data['categories'] = $categories->find();
     }
 
+    /**
+     * check if POST request
+     * @return boolean
+     */
     public function isPost()
     {
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -86,6 +98,10 @@ class CoreController extends DooController
         return false;
     }
 
+    /**
+     * check if GET request
+     * @return boolean
+     */
     public function isGet()
     {
         if ($_SERVER['REQUEST_METHOD'] == "GET") {

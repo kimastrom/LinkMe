@@ -38,6 +38,9 @@ class User extends UserBase
         parent::setupModel(__CLASS__);
     }
     
+    /**
+     * add a user to the database
+     */
     public function addUser() {
         Doo::loadHelper('CryptionHandler');
         $cryptop = new CryptionHandler();
@@ -45,6 +48,9 @@ class User extends UserBase
         $this->insert();
     }
     
+    /**
+     * get user from database
+     */
     public function getUser() {
         Doo::loadHelper('CryptionHandler');
         $cryptop = new CryptionHandler();
