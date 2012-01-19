@@ -1,0 +1,27 @@
+<!-- include 'top' -->
+<!-- loop links -->
+
+ <div class="link-wrapper">
+    <h1><a href="{{links' value.@url}}">{{links' value.@description}}</a></h1>
+    <div class="link-bar">
+        <p class="link-bar-comments">
+            <a href="<?php echo $data['baseurl']; ?>index.php/comments/{{links' value.@id}}">
+                [{{links' value.@nrOfComments}}] Kommentarer
+            </a>  - Postat av <a href="">{{links' value.@author}}</a> {{links' value.@date}}
+            
+        </p>
+        <p class="link-rating">
+            <a href="?vote=down&id={{links' value.@id}}">-</a> [{{links' value.@rating}}] <a href="?vote=up&id={{links' value.@id}}">+</a>
+        </p>
+            
+        <!-- if {{isLoggedIn}} -->
+            <!-- if {{links' value.@isOwner}} -->
+                <p>- <span><a href="{{baseurl}}index.php/?delete={{links' value.@id}}">Ta bort</a></span></p>
+            <!-- endif -->
+        <!-- endif -->
+    </div>
+</div>
+
+<!-- endloop -->
+<!-- include 'bottom' -->
+

@@ -1,0 +1,21 @@
+<!-- include 'top' -->
+<div id="error">
+<!-- include 'error' -->   
+</div>
+<form action="{{baseurl}}index.php/addlink" method="post">
+    <div>
+        <span class="normal">Url:</span>
+        <input name="url" type="text" style="width:230px;" value="http://"/>
+        <br/><span class="normal">Description</span>
+        <input name="description" type="text" style="width:230px;" value=""/>
+        <br/>
+        <select name="categories">
+        <!-- loop categories -->
+            <option value="{{categories' value.@id}}">{{categories' value.@category}}</option>
+        <!-- endloop -->
+        </select>
+    </div>
+    <div>
+        <input type="submit" value="Add Link" />
+    </div>
+</form>

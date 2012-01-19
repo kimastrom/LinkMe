@@ -1,0 +1,74 @@
+<!-- include 'top' -->
+
+<div id="single-link-header">
+    <h1><a href="{{link.@url}}">{{link.@description}}</a></h1>
+    <div class="link-bar">
+        <p class="link-bar-comments">
+            Postat av <a href="">{{link.@author}}</a> - {{link.@date}}
+        </p>
+        <p class="link-rating">
+            <a href="?vote=down&id={{link.@id}}">-</a>[{{link.@rating}}] <a href="?vote=up&id={{link.@id}}">+</a>
+        </p>
+    </div>
+</div>
+<div id="nr-comments">
+    <h3>{{link.@nrOfComments}} Kommentarer</h3>
+</div>
+
+<!-- include 'error' -->
+
+<!-- if !{{empty(comments)}} -->
+    <!-- set i as 1 -->
+
+    <!-- loop comments -->
+        <div class="comment">
+            <div class="comment-user">
+                <!-- användare och datum-->
+                <h4>#{{i}} <span>{{comments' value.@author}}</span></h4>
+                <p>{{comments' value.@date}}</p>
+                
+                <!-- if {{isLoggedIn}} == true && {{comments' value.@isOwner}} -->
+                    <p><a href="?delete={{comments' value.@id}}">Ta bort</a> - <a href="?edit={{comments' value.@id}}#form">Redigera</a></p>
+                <!-- endif -->
+                
+            </div>
+            
+            <!-- kommentartext-->
+            <div class="comment-text">
+                <p>
+                    {{comments' value.@comment}}
+                </p>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <!-- set i as {{i}} + 1 -->
+        
+    <!-- endloop -->
+    
+<!-- else -->
+    <p>inga kommentarer</p>
+<!-- endif -->
+
+<!-- if {{isLoggedIn}} -->
+
+    <div id="add-comment">
+        <a name="form"></a>   
+        <form action="{{+baseurl}}index.php/comments/{{link.@id}}" method="post">
+        <div>
+            <h3>Kommentera</h3>
+            <textarea name="comment"><!-- if {{isset(comment-text)}} -->{{comment-text}}<!-- endif --></textarea>
+        </div>
+        <div>
+            <!-- if {{isset(isEdit)}} -->
+                <input type="hidden" name="id" value="{{edit-id}}" />
+                <input class="action-button" type="submit" name="comment-button" value="editera" />
+            <!-- else -->
+                <input class="action-button" type="submit" name="comment-button" value="kommentera" />
+            <!-- endif -->
+        </div>
+    </form>
+    </div>
+
+<!-- endif -->
+
+<!-- include 'bottom' -->

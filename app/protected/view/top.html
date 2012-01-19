@@ -1,0 +1,20 @@
+<!DOCTYPE html>  
+<html lang="en">  
+    <head>  
+        <meta charset="utf-8">  
+        <title>{{title}}</title>  
+    </head>
+    <body>
+        <div id="categories">
+            <!-- loop categories -->
+                <a href="{{baseurl}}index.php/c/{{categories' value.@category}}">{{categories' value.@category}}</a>
+            <!-- endloop -->
+            <br /><br />
+        </div>
+        
+        <div id="menu">
+            <ul>
+                <li><a href="{{baseurl}}index.php/addlink"></a></li>
+            </ul>
+            <p>{{isLoggedIn}}</p>
+        </div>  

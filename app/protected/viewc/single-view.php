@@ -1,0 +1,83 @@
+
+<?php include Doo::conf()->SITE_PATH .  Doo::conf()->PROTECTED_FOLDER . "viewc//top.php"; ?>
+
+<!--Länkrubrik-->
+<div id="single-link-header">
+    <h1><a href="<?php echo $data['link']->url; ?>"><?php echo $data['link']->description; ?></a></h1>
+    <div class="link-bar">
+        <p class="link-bar-comments">
+            Postat av <a href=""><?php echo $data['link']->getAuthor(); ?></a> -<?php echo $data['link']->formatDate(); ?>
+        </p>
+        <p class="link-rating">
+            <a href="?vote=down&id=<?php echo $data['link']->id; ?>">-</a> [<?php echo $data['link']->getRating(); ?>] <a href="?vote=up&id=<?php echo $data['link']->id; ?>">+</a>
+        </p>
+    </div>
+</div>
+<div id="nr-comments">
+    <h3><?php echo $data['link']->getNrOfComments(); ?> Kommentarer</h3>
+</div>
+<!--Slut på rubrik-->
+
+<!-- Felmeddelande för kommentering-->
+<?php include Doo::conf()->SITE_PATH .  Doo::conf()->PROTECTED_FOLDER . "viewc//error.php"; ?>
+
+<!--Kommentarer på länken-->
+<?php if(!empty($data['comments'])): ?>
+    <?php $counter = 1;?>
+    
+    <?php foreach($data['comments'] as $k1=>$v1): ?>
+        <!-- kommentar-->
+        <div class="comment">
+            <div class="comment-user">
+                <!-- användare och datum-->
+                <h4>#<?php echo $counter; ?> <span><?php echo $v1->getAuthor(); ?></span></h4>
+                <p><?php echo $v1->formatDate(); ?></p>
+                
+                <?php if($data['isLoggedIn'] && $v1->isOwner()): ?>
+                    <!-- alternativ för användare-->
+                    <p><a href="?delete=<?php echo $v1->id;?>">Ta bort</a> - <a href="?edit=<?php echo $v1->id;?>#form">Redigera</a></p>
+                <?php endif; ?>
+                
+            </div>
+            
+            <!-- kommentartext-->
+            <div class="comment-text">
+                <p>
+                    <?php echo $v1->comment; ?>
+                </p>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <?php $counter++;?>
+        <!-- slut på kommentar-->
+    <?php endforeach; ?>
+    
+    
+<?php else: ?>
+    <p>inga kommentarer</p>
+<?php endif; ?>
+<!--slut på kommentarer-->
+
+<?php if($data['isLoggedIn']): ?>
+    <!--Formulär för kommentar-->
+    <div id="add-comment">
+        <a name="form"></a>   
+        <form action="<?php echo $data['baseurl']; ?>index.php/comments/<?php echo $data['link']->id; ?>" method="post">
+        <div>
+            <h3>Kommentera</h3>
+            <textarea name="comment"><?php if(isset($data['comment-text'])): ?><?php echo $data['comment-text'];?><?php endif; ?></textarea>
+        </div>
+        <div>
+            <?php if(isset($data['isEdit'])): ?>
+                <input type="hidden" name="id" value="<?php echo $_GET['edit'];?>" />
+                <input class="action-button" type="submit" name="comment-button" value="editera" />
+            <?php else: ?>
+                <input class="action-button" type="submit" name="comment-button" value="kommentera" />
+            <?php endif; ?>
+        </div>
+    </form>
+    </div>
+    <!--slut på formulär-->
+<?php endif; ?>
+
+<?php include Doo::conf()->SITE_PATH .  Doo::conf()->PROTECTED_FOLDER . "viewc/bottom.php"; ?>
